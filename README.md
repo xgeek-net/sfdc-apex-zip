@@ -2,6 +2,7 @@
 
 ## Usage
 
+### VF Page
 To include javascript in your VF Page.
 
 ```html
@@ -10,6 +11,7 @@ To include javascript in your VF Page.
 <apex:includeScript value="{!URLFOR($Resource.jQuery)}"/>
 <apex:includeScript value="{!URLFOR($Resource.JSZip)}"/>
 ```
+### Javascript
 Request Attachments file Blob data from WebService with Attachment Ids.
 
 ```java
