@@ -37,7 +37,6 @@ if( respObj['status'] != '200' ) {
 	return;
 }
 var fileData = respObj['data'];
-downloadZip( fileData );
 ```
 
 With Pages Url
@@ -52,5 +51,4 @@ if( respObj['status'] != '200' ) {
 	return;
 }
 var fileData = respObj['data'];
-downloadZip( fileData );
 ```
