@@ -1,0 +1,123 @@
+<apex:page standardController="Account">
+
+    <apex:includeScript value="/soap/ajax/25.0/connection.js"/>
+    <apex:includeScript value="/soap/ajax/25.0/apex.js"/>
+    <apex:includeScript value="{!URLFOR($Resource.jQuery)}"/>
+    <apex:includeScript value="{!URLFOR($Resource.JSZip)}"/>
+    
+  	<script type="text/javascript">
+
+  		//Download Attachments from Attachment id
+  		//Use "," split for multiple Attachments
+  		function downloadFromAttachmentId( btn ){
+
+  			jQuery(btn).attr('disabled', true);
+
+	        try{
+	          
+	          var rIds = '00P1000000MUdY2,00P1000000MUdXi';	//Attachment Id
+
+	          sforce.connection.sessionId = '{!$Api.Session_ID}';
+	          var response = sforce.apex.execute("WS_ZipUtil","getAttachmentById",{sfdcId:rIds});
+	          var respObj = JSON.parse( response  );
+	          if( respObj['status'] != '200' ) {
+	            alert( respObj ['error'] );
+	            return;
+	          }
+	          var fileData = respObj['data'];
+	          downloadZip( fileData );
+	          
+	        } catch (e) {
+	          alert(e);
+	        }
+
+	        jQuery(btn).attr('disabled', false);
+
+    	}
+
+    	//Download all Attachments from sobject id
+    	function downloadFromObjectId( btn ){
+
+  			jQuery(btn).attr('disabled', true);
+
+	        try{
+	          
+	          var rId = '0011000000uzA9u';	//Account Id
+
+	          sforce.connection.sessionId = '{!$Api.Session_ID}';
+	          var response = sforce.apex.execute("WS_ZipUtil","getAttachmentByParentId",{sfdcId:rId});
+	          var respObj = JSON.parse( response  );
+	          if( respObj['status'] != '200' ) {
+	            alert( respObj ['error'] );
+	            return;
+	          }
+	          var fileData = respObj['data'];
+	          downloadZip( fileData );
+	        } catch (e) {
+	          alert(e);
+	        }
+
+	        jQuery(btn).attr('disabled', false);
+
+    	}
+
+    	//Download Page as PDF from url
+  		//Use "," split for multiple Attachments
+  		function downloadFromPageUrl( btn ){
+
+  			jQuery(btn).attr('disabled', true);
+
+	        try{
+	          
+	          var fileUrl = '/apex/Demo_WS_ZipUtil,/apex/AccountSitePage';	//File url
+
+	          sforce.connection.sessionId = '{!$Api.Session_ID}';
+	          var response = sforce.apex.execute("WS_ZipUtil","getPagePdfBlobByUrl",{pageUrl:fileUrl});
+	          var respObj = JSON.parse( response  );
+	          if( respObj['status'] != '200' ) {
+	            alert( respObj ['error'] );
+	            return;
+	          }
+	          var fileData = respObj['data'];
+	          downloadZip( fileData );
+	          
+	        } catch (e) {
+	          alert(e);
+	        }
+
+	        jQuery(btn).attr('disabled', false);
+
+    	}
+
+    	//Zip files and download
+    	function downloadZip( fileData ) {
+    		var fileName = 'example.zip';	//Temp file name for downloading
+
+    		var zip = new JSZip();
+			for( var k in fileData ) {
+				zip.file(fileData[k]['Name'], fileData[k]['Body'].toString(),{base64: true});
+			}
+			content = zip.generate();
+			response = sforce.apex.execute("WS_ZipUtil","saveToDocument",{zipFileData:content, fileName:fileName});
+			respObj = JSON.parse( response  );
+			if( respObj['status'] != '200' ) {
+				alert( respObj ['error'] );
+				return;
+			}
+			var docId = respObj['data'];
+			location.href = '/servlet/servlet.FileDownload?file=' + docId;
+
+    	}
+  	</script>
+    <apex:form >
+        <!--<apex:pageblock title="Zip From Attachment Id" >
+            <input type="button" onclick="downloadFromAttachmentId(this);" value="Download" />
+        </apex:pageblock> -->
+        <apex:pageblock title="Zip From Object Id" >
+            <input type="button" onclick="downloadFromObjectId(this);" value="Download" />
+        </apex:pageblock>
+        <!--<apex:pageblock title="Zip From Page url" >
+            <input type="button" onclick="downloadFromPageUrl(this);" value="Download" />
+        </apex:pageblock>-->
+    </apex:form>
+</apex:page>
