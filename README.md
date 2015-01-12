@@ -1,4 +1,5 @@
 # SFDC APEX Zip Attachments With JSZip
+https://www.xgeek.net/salesforce/apex/salesforce-apex-zip-attachments-with-jszip/
 
 ## Usage
 
