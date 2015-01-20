@@ -1,5 +1,10 @@
 # SFDC APEX Zip Attachments With JSZip
-https://www.xgeek.net/salesforce/apex/salesforce-apex-zip-attachments-with-jszip/
+@see https://www.xgeek.net/salesforce/apex/salesforce-apex-zip-attachments-with-jszip/
+
+<a href="https://githubsfdeploy.herokuapp.com?owner=xgeek-net&repo=sfdc-apex-zip">
+  <img alt="Deploy to Salesforce"
+       src="https://raw.githubusercontent.com/afawcett/githubsfdeploy/master/src/main/webapp/resources/img/deploy.png">
+</a>
 
 ## Usage
 
